@@ -23,7 +23,7 @@ class ResultsController < ApplicationController
 
       payload_json = payload.to_json
 
-      # Send webhook to https://hooks.slack.com/services/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
+      # Send webhook
       params = {'payload' => payload_json}
       url = URI.parse('https://hooks.slack.com/services/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')
       resp, data = Net::HTTP.post_form(url, params)
