@@ -1,13 +1,33 @@
 class ResultsController < ApplicationController
   before_action :set_game
+  require 'open-uri'
+  require 'net/http'
 
   def create
     response = ResultService.create(@game, params[:result])
 
     if response.success?
-      puts ">>>"
-      puts response.result.to_json
-      # {"winner":"Dude2","loser":"Dude1","created_at":"2015-07-29 02:26:50 UTC"}
+
+      # Parse response 
+      webhook_content = response.result.to_json
+      winner = JSON.parse(webhook_content)["winner"]
+      loser = JSON.parse(webhook_content)["loser"]
+      
+      # Build payload
+      payload = {
+        :channel => "#table-tennis",
+        :username => "Yung Bot",
+        :text => winner+" just beat "+loser+"!",
+        :icon_emoji => ":100:"
+      }
+
+      payload_json = payload.to_json
+
+      # Send webhook to https://hooks.slack.com/services/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
+      params = {'payload' => payload_json}
+      url = URI.parse('https://hooks.slack.com/services/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')
+      resp, data = Net::HTTP.post_form(url, params)
+
       redirect_to game_path(@game)
     else
       @result = response.result
