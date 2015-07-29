@@ -5,6 +5,9 @@ class ResultsController < ApplicationController
     response = ResultService.create(@game, params[:result])
 
     if response.success?
+      puts ">>>"
+      puts response.result.to_json
+      # {"winner":"Dude2","loser":"Dude1","created_at":"2015-07-29 02:26:50 UTC"}
       redirect_to game_path(@game)
     else
       @result = response.result
