@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 ruby '2.2.0'
 
 gem 'hirb'
+gem 'mixpanel-ruby'
 
 gem 'rails', '~> 4.1.7'
 
